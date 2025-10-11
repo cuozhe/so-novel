@@ -8,7 +8,7 @@ set -e
 set -o pipefail
 
 # 获取最新版本号
-LATEST_VERSION=$(curl -s https://api.github.com/repos/freeok/so-novel/releases/latest | grep '"tag_name":' | cut -d '"' -f4)
+LATEST_VERSION=$(curl -s https://api.github.com/repos/freeok/so-novel/releases/latest  | grep '"tag_name":' | cut -d '"' -f4)
 echo "🔖 最新版本：$LATEST_VERSION"
 
 # 自动识别架构
@@ -28,7 +28,7 @@ esac
 
 APP_NAME="sonovel"
 TAR_NAME="${APP_NAME}-linux_${ARCH_TAG}.tar.gz"
-DIR_NAME="sonovel-linux_${ARCH_TAG}"
+DIR_NAME="SoNovel-Linux_${ARCH_TAG}"
 IMAGE_NAME="sonovel:${LATEST_VERSION#v}"
 
 # 下载函数
@@ -71,21 +71,22 @@ fi
 
 echo "✅ Docker 镜像构建完成 (${ARCH_TAG})"
 
+echo ""
 echo "🚀 Web 模式请手动执行以下命令启动容器:"
-echo "docker run -d \
---name sonovel-web \
--v /sonovel/config.ini:/sonovel/config.ini \
--v /sonovel/downloads:/sonovel/downloads \
--v /sonovel/rules:/sonovel/rules \
--p 7765:7765 \
--e JAVA_OPTS='-Dmode=web' \
+echo "docker run -d \\
+--name sonovel-web \\
+-v /sonovel/config.ini:/sonovel/config.ini \\
+-v /sonovel/downloads:/sonovel/downloads \\
+-v /sonovel/rules:/sonovel/rules \\
+-p 7765:7765 \\
+-e JAVA_OPTS='-Dmode=web' \\
 ${IMAGE_NAME}"
 
 echo ""
 echo "🚀 TUI 模式请手动执行以下命令启动容器:"
-echo "docker run -it --rm \
--v /sonovel/config.ini:/sonovel/config.ini \
--v /sonovel/downloads:/sonovel/downloads \
--v /sonovel/rules:/sonovel/rules \
--e JAVA_OPTS='-Dmode=tui' \
+echo "docker run -it --rm \\
+-v /sonovel/config.ini:/sonovel/config.ini \\
+-v /sonovel/downloads:/sonovel/downloads \\
+-v /sonovel/rules:/sonovel/rules \\
+-e JAVA_OPTS='-Dmode=tui' \\
 ${IMAGE_NAME}"
